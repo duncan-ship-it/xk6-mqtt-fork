@@ -1,4 +1,4 @@
-# xk6-mqtt
+# xk6-mqtt-fork
 
 This is a [k6](https://go.k6.io/k6) extension using the [xk6](https://github.com/grafana/xk6) system.
 
@@ -10,6 +10,10 @@ Per each connection to Mqtt, many messages can be sent. These messages are an ar
 There is also a consumer for testing purposes, i.e. to make sure you send the correct data to Mqtt.
 The consumer is not meant to be used for testing Mqtt under load.
 
+## Fork changes
+
+- Updated `publish` and `publishSync` to accept arbitrary message types (instead of just string).
+
 ## k6 version
 
 This extension is tested with k6 version `v0.49.0` last release is [v0.40.0](https://github.com/pmalhaire/xk6-mqtt/releases/tag/v0.40.0).
@@ -19,7 +23,7 @@ This extension is tested with k6 version `v0.49.0` last release is [v0.40.0](htt
 
 If you want to contribute and improve this extension (you are welcome !) see Build for development section.
 
-If your are only interrested to use this extension and write your own js tests this section is for you.
+If your are only interested to use this extension and write your own js tests this section is for you.
 It only requieres docker.
 
 Run the following commands.

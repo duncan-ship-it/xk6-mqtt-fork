@@ -14,7 +14,7 @@ import (
 func (c *client) Publish(
 	topic string,
 	qos int,
-	message string,
+	message sobek.Value,
 	retain bool,
 	timeout uint,
 	success func(sobek.Value) (sobek.Value, error),
@@ -48,7 +48,8 @@ func (c *client) Publish(
 			})
 			return
 		}
-		token := c.pahoClient.Publish(topic, byte(qos), retain, message)
+		payload := message.Export()
+		token := c.pahoClient.Publish(topic, byte(qos), retain, payload)
 		if !token.WaitTimeout(time.Duration(timeoutValue) * time.Millisecond) {
 			callback(func() error {
 				ev := c.newErrorEvent("publish timeout")
@@ -75,7 +76,7 @@ func (c *client) Publish(
 			return
 		}
 		callback(func() error {
-			err := c.publishMessageMetric(float64(len(message)))
+			err := c.publishMessageMetric(float64(getSize(&payload)))
 			if err != nil {
 				return err
 			}
@@ -94,7 +95,7 @@ func (c *client) Publish(
 func (c *client) publishSync(
 	topic string,
 	qos int,
-	message string,
+	message sobek.Value,
 	retain bool,
 	timeout uint,
 ) error {
@@ -112,7 +113,8 @@ func (c *client) publishSync(
 		return ErrTimeoutToLong
 	}
 
-	token := c.pahoClient.Publish(topic, byte(qos), retain, message)
+	payload := message.Export()
+	token := c.pahoClient.Publish(topic, byte(qos), retain, payload)
 	// sync case
 	if !token.WaitTimeout(time.Duration(timeoutValue) * time.Millisecond) {
 		rt := c.vu.Runtime()
@@ -126,10 +128,11 @@ func (c *client) publishSync(
 		return ErrPublish
 	}
 
-	err = c.publishMessageMetric(float64(len(message)))
+	err = c.publishMessageMetric(float64(getSize(&payload)))
 	if err != nil {
 		return err
 	}
+
 	return nil
 }
 

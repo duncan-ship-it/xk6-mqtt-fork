@@ -299,6 +299,7 @@ func (c *client) Connect() error {
 	opts.SetUsername(c.conf.user)
 	opts.SetPassword(c.conf.password)
 	opts.SetCleanSession(c.conf.cleansess)
+
 	client := paho.NewClient(opts)
 	token := client.Connect()
 	rt := c.vu.Runtime()
