@@ -1,4 +1,4 @@
-module github.com/pmalhaire/xk6-mqtt
+module github.com/duncan-ship-it/xk6-mqtt-fork
 
 go 1.22.7
 
